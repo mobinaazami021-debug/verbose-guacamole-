@@ -1,84 +1,0 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>آموزش هم نهشتی مثلث ها</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://v1.fontapi.ir/css/Vazir" rel="stylesheet">
-</head>
-<body>
-    <div class="container">
-        <header>
-            <h1>آموزش هم‌نهشتی مثلث‌ها</h1>
-            <p class="subtitle">یک ابزار تعاملی برای دانش‌آموزان پایه نهم</p>
-        </header>
-
-        <nav class="tabs">
-            <button class="tab-button active" onclick="openTab('tab-teach')">آموزش 📚</button>
-            <button class="tab-button" onclick="openTab('tab-play')">مثلث‌ساز 🔺</button>
-            <button class="tab-button" onclick="openTab('tab-quiz')">آزمون ❓</button>
-        </nav>
-
-        <div id="tab-teach" class="tab-content active">
-            <h2>حالت‌های هم‌نهشتی مثلث‌ها</h2>
-            <div class="theorem-card">
-                <h3>1. حالت ض ز ض (دو ضلع و زاویه بین)</h3>
-                <p>اگر دو ضلع و زاویه بین آن‌ها در یک مثلث، با دو ضلع و زاویه بین آن‌ها در مثلث دیگر مساوی باشند، آن دو مثلث هم‌نهشت هستند.</p>
-            </div>
-            <div class="theorem-card">
-                <h3>2. حالت ز ض ز (دو زاویه و ضلع بین)</h3>
-                <p>اگر دو زاویه و ضلع بین آن‌ها در یک مثلث، با دو زاویه و ضلع بین آن‌ها در مثلث دیگر مساوی باشند، آن دو مثلث هم‌نهشت هستند.</p>
-            </div>
-            <div class="theorem-card">
-                <h3>3. حالت ض ض ض (سه ضلع)</h3>
-                <p>اگر سه ضلع یک مثلث با سه ضلع مثلث دیگر مساوی باشند، آن دو مثلث هم‌نهشت هستند.</p>
-            </div>
-        </div>
-
-        <div id="tab-play" class="tab-content">
-            <h2>مثلث‌ساز پویا</h2>
-            <p>مقادیر را تغییر دهید و ببینید آیا مثلث شما با مثلث نمونه هم‌نهشت می‌شود یا خیر!</p>
-            
-            <div class="triangle-controls">
-                <div class="control-group">
-                    <label for="sideAB">ضلع AB (سانتی‌متر):</label>
-                    <input type="number" id="sideAB" min="1" max="20" value="5">
-                </div>
-                <div class="control-group">
-                    <label for="angleA">زاویه A (درجه):</label>
-                    <input type="number" id="angleA" min="1" max="178" value="60">
-                </div>
-                <div class="control-group">
-                    <label for="sideAC">ضلع AC (سانتی‌متر):</label>
-                    <input type="number" id="sideAC" min="1" max="20" value="5">
-                </div>
-            </div>
-
-            <div class="canvas-container">
-                <canvas id="triangleCanvas" width="400" height="300"></canvas>
-            </div>
-
-            <div id="congruenceResult" class="result-message"></div>
-        </div>
-
-        <div id="tab-quiz" class="tab-content">
-            <h2>آزمونک هم‌نهشتی</h2>
-            <div id="quizContainer">
-                <p>به سوال زیر پاسخ دهید:</p>
-                <div id="question"></div>
-                <div id="options"></div>
-                <button onclick="checkAnswer()" class="submit-btn">بررسی پاسخ</button>
-                <div id="quizResult"></div>
-            </div>
-        </div>
-
-        <footer>
-            <p>ساخته شده با ❤ برای معلمان و دانش‌آموزان ایران</p>
-        </footer>
-    </div>
-
-    <script src="script.js"></script>
-</body>
-
-</html>
