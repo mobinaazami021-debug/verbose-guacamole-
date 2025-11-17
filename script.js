@@ -1,40 +1,56 @@
 function openTab(tabName) {
+    console.log('Opening tab:', tabName);
+    
+    // مخفی کردن تمام تب‌ها
     const tabContents = document.getElementsByClassName("tab-content");
     for (let i = 0; i < tabContents.length; i++) {
         tabContents[i].classList.remove("active");
     }
 
+    // غیرفعال کردن تمام دکمه‌ها
     const tabButtons = document.getElementsByClassName("tab-button");
     for (let i = 0; i < tabButtons.length; i++) {
         tabButtons[i].classList.remove("active");
     }
 
+    // نمایش تب انتخاب شده و فعال کردن دکمه
     document.getElementById(tabName).classList.add("active");
     event.currentTarget.classList.add("active");
 
+    // اگر تب مثلث‌ساز باز شد، مثلث را رسم کن
     if (tabName === 'tab-play') {
-        drawTriangle();
+        setTimeout(drawTriangle, 100);
     }
+    // اگر تب آزمون باز شد، سوال جدید بده
     if (tabName === 'tab-quiz') {
-        loadNewQuestion();
+        setTimeout(loadNewQuestion, 100);
     }
 }
 
+// مثلث‌ساز پویا
 function drawTriangle() {
+    console.log('Drawing triangle...');
     const canvas = document.getElementById('triangleCanvas');
-    if (!canvas) return;
+    if (!canvas) {
+        console.error('Canvas not found!');
+        return;
+    }
     
     const ctx = canvas.getContext('2d');
     const resultDiv = document.getElementById('congruenceResult');
 
+    // پاک کردن کانواس
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+    // گرفتن مقادیر از ورودی‌ها
     const sideAB = parseFloat(document.getElementById('sideAB').value) || 5;
     const angleA = parseFloat(document.getElementById('angleA').value) || 60;
     const sideAC = parseFloat(document.getElementById('sideAC').value) || 5;
 
+    // تبدیل زاویه به رادیان
     const angleARad = angleA * Math.PI / 180;
 
+    // مختصات نقاط
     const pointA = { x: 100, y: 200 };
     const pointB = { x: pointA.x + sideAB * 20, y: pointA.y };
     const pointC = {
@@ -42,6 +58,7 @@ function drawTriangle() {
         y: pointA.y - sideAC * 20 * Math.sin(angleARad)
     };
 
+    // رسم مثلث
     ctx.beginPath();
     ctx.moveTo(pointA.x, pointA.y);
     ctx.lineTo(pointB.x, pointB.y);
@@ -51,11 +68,15 @@ function drawTriangle() {
     ctx.lineWidth = 2;
     ctx.stroke();
 
+    // پر کردن مثلث با رنگ روشن
     ctx.fillStyle = 'rgba(46, 125, 50, 0.1)';
     ctx.fill();
 
+    // رسم نقاط
     ctx.fillStyle = 'red';
     ctx.font = '14px Arial';
+    ctx.textAlign = 'center';
+    
     ctx.beginPath();
     ctx.arc(pointA.x, pointA.y, 5, 0, Math.PI * 2);
     ctx.fill();
@@ -71,6 +92,7 @@ function drawTriangle() {
     ctx.fill();
     ctx.fillText('C', pointC.x - 10, pointC.y - 10);
 
+    // بررسی هم‌نهشتی با یک مثلث نمونه
     const sampleSide1 = 5;
     const sampleAngle = 60;
     const sampleSide2 = 5;
@@ -82,19 +104,7 @@ function drawTriangle() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    const sideAB = document.getElementById('sideAB');
-    const angleA = document.getElementById('angleA');
-    const sideAC = document.getElementById('sideAC');
-    
-    if (sideAB) sideAB.addEventListener('input', drawTriangle);
-    if (angleA) angleA.addEventListener('input', drawTriangle);
-    if (sideAC) sideAC.addEventListener('input', drawTriangle);
-    
-    drawTriangle();
-    loadNewQuestion();
-});
-
+// سیستم آزمون
 let currentQuestion = {};
 let userAnswer = null;
 
@@ -117,6 +127,8 @@ const questions = [
 ];
 
 function loadNewQuestion() {
+    console.log('Loading new question...');
+    // انتخاب یک سوال تصادفی
     const randomIndex = Math.floor(Math.random() * questions.length);
     currentQuestion = questions[randomIndex];
     
@@ -124,21 +136,31 @@ function loadNewQuestion() {
     const optionsDiv = document.getElementById('options');
     const resultDiv = document.getElementById('quizResult');
     
-    if (!questionDiv) return;
+    if (!questionDiv) {
+        console.error('Question div not found!');
+        return;
+    }
     
+    // پاک کردن نتیجه قبلی
     resultDiv.innerHTML = '';
+    
+    // نمایش سوال
     questionDiv.innerHTML = <h3>${currentQuestion.question}</h3>;
     
+    // نمایش گزینه‌ها
     optionsDiv.innerHTML = '';
     currentQuestion.options.forEach((option, index) => {
         const optionElement = document.createElement('div');
         optionElement.className = 'option';
         optionElement.innerHTML = option;
         optionElement.onclick = function() {
+            // حذف انتخاب قبلی
             const allOptions = document.getElementsByClassName('option');
             for (let i = 0; i < allOptions.length; i++) {
                 allOptions[i].style.backgroundColor = '#e8f5e9';
             }
+            
+            // انتخاب گزینه جدید
             this.style.backgroundColor = '#c8e6c9';
             userAnswer = index;
         };
@@ -147,8 +169,8 @@ function loadNewQuestion() {
 }
 
 function checkAnswer() {
+    console.log('Checking answer...');
     const resultDiv = document.getElementById('quizResult');
-    if (!resultDiv) return;
     
     if (userAnswer === null) {
         resultDiv.innerHTML = "<p style='color: orange;'>لطفاً یک گزینه انتخاب کنید!</p>";
@@ -161,5 +183,26 @@ function checkAnswer() {
         resultDiv.innerHTML = <p style='color: red;'>❌ متأسفانه پاسخ صحیح نبود. پاسخ صحیح: ${currentQuestion.options[currentQuestion.correct]}</p>;
     }
     
+    // پس از 3 ثانیه سوال جدید بارگذاری شود
     setTimeout(loadNewQuestion, 3000);
 }
+
+// وقتی صفحه کاملاً لود شد
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Page loaded!');
+    
+    // اضافه کردن Event Listener به ورودی‌های مثلث‌ساز
+    const sideAB = document.getElementById('sideAB');
+    const angleA = document.getElementById('angleA');
+    const sideAC = document.getElementById('sideAC');
+    
+    if (sideAB && angleA && sideAC) {
+        sideAB.addEventListener('input', drawTriangle);
+        angleA.addEventListener('input', drawTriangle);
+        sideAC.addEventListener('input', drawTriangle);
+    }
+    
+    // بارگذاری اولیه
+    drawTriangle();
+    loadNewQuestion();
+});
