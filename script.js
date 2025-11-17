@@ -22,14 +22,16 @@ function openTab(tabName) {
 
 function drawTriangle() {
     const canvas = document.getElementById('triangleCanvas');
+    if (!canvas) return;
+    
     const ctx = canvas.getContext('2d');
     const resultDiv = document.getElementById('congruenceResult');
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    const sideAB = parseFloat(document.getElementById('sideAB').value);
-    const angleA = parseFloat(document.getElementById('angleA').value);
-    const sideAC = parseFloat(document.getElementById('sideAC').value);
+    const sideAB = parseFloat(document.getElementById('sideAB').value) || 5;
+    const angleA = parseFloat(document.getElementById('angleA').value) || 60;
+    const sideAC = parseFloat(document.getElementById('sideAC').value) || 5;
 
     const angleARad = angleA * Math.PI / 180;
 
@@ -53,6 +55,7 @@ function drawTriangle() {
     ctx.fill();
 
     ctx.fillStyle = 'red';
+    ctx.font = '14px Arial';
     ctx.beginPath();
     ctx.arc(pointA.x, pointA.y, 5, 0, Math.PI * 2);
     ctx.fill();
@@ -79,9 +82,18 @@ function drawTriangle() {
     }
 }
 
-document.getElementById('sideAB').addEventListener('input', drawTriangle);
-document.getElementById('angleA').addEventListener('input', drawTriangle);
-document.getElementById('sideAC').addEventListener('input', drawTriangle);
+document.addEventListener('DOMContentLoaded', function() {
+    const sideAB = document.getElementById('sideAB');
+    const angleA = document.getElementById('angleA');
+    const sideAC = document.getElementById('sideAC');
+    
+    if (sideAB) sideAB.addEventListener('input', drawTriangle);
+    if (angleA) angleA.addEventListener('input', drawTriangle);
+    if (sideAC) sideAC.addEventListener('input', drawTriangle);
+    
+    drawTriangle();
+    loadNewQuestion();
+});
 
 let currentQuestion = {};
 let userAnswer = null;
@@ -112,6 +124,8 @@ function loadNewQuestion() {
     const optionsDiv = document.getElementById('options');
     const resultDiv = document.getElementById('quizResult');
     
+    if (!questionDiv) return;
+    
     resultDiv.innerHTML = '';
     questionDiv.innerHTML = <h3>${currentQuestion.question}</h3>;
     
@@ -134,6 +148,7 @@ function loadNewQuestion() {
 
 function checkAnswer() {
     const resultDiv = document.getElementById('quizResult');
+    if (!resultDiv) return;
     
     if (userAnswer === null) {
         resultDiv.innerHTML = "<p style='color: orange;'>لطفاً یک گزینه انتخاب کنید!</p>";
@@ -148,8 +163,3 @@ function checkAnswer() {
     
     setTimeout(loadNewQuestion, 3000);
 }
-
-window.onload = function() {
-    drawTriangle();
-    loadNewQuestion();
-};
